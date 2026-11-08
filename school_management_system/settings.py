@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decimal import Decimal
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this line for WhiteNoise
 ]
 
 ROOT_URLCONF = 'school_management_system.urls'
@@ -128,6 +130,16 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# School fee defaults to ₦50,000; deployments may override it using the environment.
+SCHOOL_FEE_AMOUNT = Decimal(os.environ.get('SCHOOL_FEE_AMOUNT', '50000'))
+
+# Remita sandbox is demo.remita.net; set the production API and checkout URLs per your account.
+REMITA_MERCHANT_ID = os.environ.get('REMITA_MERCHANT_ID', '')
+REMITA_API_KEY = os.environ.get('REMITA_API_KEY', '')
+REMITA_SERVICE_TYPE_ID = os.environ.get('REMITA_SERVICE_TYPE_ID', '')
+REMITA_API_BASE_URL = os.environ.get('REMITA_API_BASE_URL', 'https://demo.remita.net')
+REMITA_CHECKOUT_BASE_URL = os.environ.get('REMITA_CHECKOUT_BASE_URL', 'https://demo.remita.net')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

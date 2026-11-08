@@ -1,0 +1,41 @@
+{% block title %}School fee payment | CampusDesk{% endblock %}
+{% block heading %}School fee payment{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <p>Choose how you want to pay. Remita will generate your Retrieval Reference Number (RRR) and securely process your payment.</p>
+</section>
+<section class="panel" style="max-width: 680px; padding: 28px;">
+  <div class="panel-head">
+    <div><span class="eyebrow">REMITA PAYMENT</span><h3>School fees</h3></div>
+  </div>
+  {% if fee_amount %}
+    <p><strong>Amount due:</strong> ₦{{ fee_amount|floatformat:2 }}</p>
+  {% else %}
+    <p class="flash warning">The school fee amount is not configured. Contact the school administration before paying.</p>
+  {% endif %}
+  <p>Pay securely through Remita. Available channels can include bank card, bank transfer, USSD, or other methods enabled for the school’s Remita account. The settlement destination should be configured there as Opay Bank, 9129560631.</p>
+
+  {% if latest_payment and latest_payment.status == 'pending' and latest_payment.rrr %}
+    <p><strong>Your RRR:</strong> {{ latest_payment.rrr }}</p>
+    <p><strong>Selected method:</strong> {{ latest_payment.get_payment_method_display }}</p>
+    <p>Complete the payment on Remita. After returning, we verify it with Remita before unlocking results.</p>
+    <p><a class="text-link" href="{{ checkout_url }}">Continue to Remita checkout →</a></p>
+    <p><a class="text-link" href="{% url 'remita_return' latest_payment.pk %}">I have paid — check status and download receipt →</a></p>
+  {% elif fee_amount %}
+    <form method="post" class="payment-form">
+      {% csrf_token %}
+      <label for="payment_method">Choose your preferred payment method</label>
+      <select name="payment_method" id="payment_method" required>
+        <option value="bank_card" selected>Bank card</option>
+        <option value="bank_transfer">Bank transfer</option>
+        <option value="other">Other Remita-supported method</option>
+      </select>
+      <p>After you continue, Remita generates your RRR and opens secure checkout. Choose an available channel there to complete payment.</p>
+      <button type="submit">Generate RRR and continue</button>
+    </form>
+  {% endif %}
+  <p class="empty">Make sure your account profile has a valid email address and phone number for Remita.</p>
+</section>
+{% endblock %}
+
+{# School-fee payment: presents the configured fee and guides the student through Remita RRR generation, checkout, and verification. #}

@@ -1,4 +1,5 @@
 {% load static %}
+{# Shared layout: loads site-wide assets and provides authenticated navigation and reusable page blocks. #}
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,12 +10,14 @@
   <link rel="stylesheet" href="{% static 'style.css/main.css' %}">
 </head>
 <body>
+ 
 {% if user.is_authenticated %}
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark">C</span><span>CampusDesk</span></a>
     <div class="profile-mini"><div class="avatar">{{ user.first_name|default:user.username|slice:':1'|upper }}</div><div><strong>{{ user.get_full_name|default:user.username }}</strong><small>Student account</small></div></div>
-    <nav class="nav"><span class="nav-label">Workspace</span><a href="{% url 'dashboard' %}">Overview</a><a href="{% url 'results' %}">My results</a><a href="{% url 'materials' %}">Materials</a><a href="{% url 'notifications' %}">Notifications</a><a href="{% url 'messages' %}">Messages</a><span class="nav-label">Account</span><a href="{% url 'profile' %}">Profile & biodata</a><a href="{% url 'password_change' %}">Security</a></nav>
+    <nav class="nav"><span class="nav-label">Workspace</span>
+      <a href="{% url 'dashboard' %}">Overview</a><a href="{% url 'payment' %}">School fee payment</a><a href="{% url 'results' %}">My results</a><a href="{% url 'materials' %}">Materials</a><a href="{% url 'notifications' %}">Notifications</a><a href="{% url 'messages' %}">Messages</a><span class="nav-label">Account</span><a href="{% url 'profile' %}">Profile & biodata</a><a href="{% url 'password_change' %}">Security</a></nav>
     <a class="logout" href="{% url 'logout' %}">Sign out <span>↗</span></a>
   </aside>
   <main class="main"><header class="topbar"><button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button><div><span class="eyebrow">STUDENT PORTAL</span><h1>{% block heading %}Good to see you{% endblock %}</h1></div><a class="top-avatar" href="{% url 'profile' %}">{{ user.first_name|default:user.username|slice:':1'|upper }}</a></header>

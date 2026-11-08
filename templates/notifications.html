@@ -1,1 +1,12 @@
-{% extends 'base.html' %}{% block title %}Notifications | CampusDesk{% endblock %}{% block heading %}Notifications{% endblock %}{% block content %}<section class="panel notification-list">{% for notification in notifications %}<article><span class="notice-dot"></span><div><h3>{{ notification.title }}</h3><p>{{ notification.message }}</p><small>{{ notification.created_at|date:'M j, Y · g:i A' }}</small></div></article>{% empty %}<div class="empty">You are all caught up.</div>{% endfor %}</section>{% endblock %}
+{% extends 'base.html' %}
+{# Notifications feed: shows each update with its publication time, or an empty state when none exist. #}
+{% block title %}Notifications | CampusDesk{% endblock %}
+{% block heading %}Notifications{% endblock %}
+{% block content %}<section class="panel notification-list">
+    {% for notification in notifications %}
+    <article>
+        <span class="notice-dot"></span><div><h3>{{ notification.title }}</h3><p>{{ notification.message }}</p><small>{{ notification.created_at|date:'M j, Y · g:i A' }}</small></div>
+    </article>
+    {% empty %}<div class="empty">You are all caught up.</div>
+    {% endfor %}</section>
+    {% endblock %}
